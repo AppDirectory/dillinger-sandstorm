@@ -63,8 +63,7 @@ const pkgdef :Spk.PackageDefinition = (
       shortDescription = (defaultText = "Markdown editor"),
 
       screenshots = [
-        #(width = 746, height = 795, jpeg = embed "path/to/screenshot-1.jpeg"),
-        #(width = 640, height = 480, png = embed "path/to/screenshot-2.png"),
+        (width = 1126, height = 664, png = embed "screenshot.png"),
       ],
       #changeLog = (defaultText = embed "path/to/sandstorm-specific/changelog.md"),
     ),
