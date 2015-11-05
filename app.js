@@ -95,7 +95,7 @@ app.use(github)
 app.use(googledrive)
 app.use(onedrive)
 
-app.post('/save', routes.save)
+app.post('/save', routes.ensureWritePermission, routes.save)
 app.get('/load', routes.load)
 
 http.createServer(app).listen(app.get('port'), function createServerCb() {

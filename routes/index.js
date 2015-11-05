@@ -9,6 +9,8 @@ var path = require('path')
 
 // Show the home page
 exports.index = function(req, res) {
+  var permissions = (req.get('X-Sandstorm-Permissions') || '').split(',');
+  var isReadOnly = permissions.indexOf('write') == -1;
 
   // Some flags to be set for client-side logic.
   var indexConfig = {
@@ -20,7 +22,8 @@ exports.index = function(req, res) {
     isDropboxConfigured: Dropbox.isConfigured,
     isGithubConfigured: Github.isConfigured,
     isGoogleDriveConfigured: GoogleDrive.isConfigured,
-    isOneDriveConfigured: OneDrive.isConfigured
+    isOneDriveConfigured: OneDrive.isConfigured,
+    isReadOnly: isReadOnly
   }
 
   if (!req.session.isEvernoteSynced) {
