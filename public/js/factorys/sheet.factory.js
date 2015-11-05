@@ -10,7 +10,7 @@ module.exports =
 
     angular.extend(this, {
       id: new Date().getTime(),
-      title: 'Untitled Document.md',
+      title: 'doc',
       body: ''
     });
 

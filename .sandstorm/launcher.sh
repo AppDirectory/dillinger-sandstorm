@@ -33,8 +33,8 @@ cd /opt/app
 export HOME=/var/dillinger
 export NODE_ENV=production
 
-mkdir -p "$HOME"
-touch "${HOME}/file.md"
+mkdir -p /var/dillinger/downloads/files/{md,html,pdf}
+touch /var/dillinger/file.md
 
 node app
 exit 0

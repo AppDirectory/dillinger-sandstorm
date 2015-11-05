@@ -33,13 +33,13 @@ var Kore = function(){
         , error: false
         }
 
-      var name = req.body.name.trim() 
+      var name = req.body.name.trim() || 'doc'
 
-      if(!name.includes('.md')){
+      if (name.search(/\.md$/) == -1) {
         name = name + '.md'
       }
 
-      var filename = path.resolve(__dirname, '../../downloads/files/md/' + name )
+      var filename = '/var/dillinger/downloads/files/md/' + name
 
       // TODO: THIS CAN BE OPTIMIZED WITH PIPING INSTEAD OF WRITING TO DISK
       fs.writeFile( filename, unmd, 'utf8', function fetchMdWriteFileCb(err, data){
@@ -60,7 +60,7 @@ var Kore = function(){
     
       var fileId = req.params.mdid
 
-      var filePath = path.resolve(__dirname, '../../downloads/files/md/' + fileId )
+      var filePath = '/var/dillinger/downloads/files/md/' + fileId
 
       res.download(filePath, fileId, function downloadMdDownloadCb(err){
         if(err) {
@@ -106,7 +106,7 @@ var Kore = function(){
 
       var name = req.body.name.trim() + '.html'
 
-      var filename = path.resolve(__dirname, '../../downloads/files/html/' + name )
+      var filename = '/var/dillinger/downloads/files/html/' + name
 
       fs.writeFile( filename, html, 'utf8', function writeFileCbFetchHtml(err, data){
 
@@ -140,7 +140,7 @@ var Kore = function(){
 
       var fileId = req.params.html
 
-      var filePath = path.resolve(__dirname, '../../downloads/files/html/' + fileId )
+      var filePath = '/var/dillinger/downloads/files/html/' + fileId
       
       res.download(filePath, fileId, function downloadHtmlDownloadCb(err){
         if(err) {
@@ -176,7 +176,7 @@ var Kore = function(){
 
       var format = fs.readFileSync( path.resolve(__dirname, '../../public/css/app.css') ).toString('utf-8')
       var html = _getFullHtml(req.body.name, unmd, format)
-      var temp = path.resolve(__dirname, '../../downloads/files/pdf/temp.html')
+      var temp = '/var/dillinger/downloads/files/pdf/temp.html'
 
       fs.writeFile( temp, html, 'utf8', function fetchPdfWriteFileCb(err, data){
 
@@ -188,7 +188,7 @@ var Kore = function(){
         }
         else{
           var name = req.body.name.trim() + '.pdf'
-          var filename = path.resolve(__dirname, '../../downloads/files/pdf/' + name)
+          var filename = '/var/dillinger/downloads/files/pdf/' + name
 
           var childArgs = [
             path.join(__dirname, 'render.js'),
@@ -215,7 +215,7 @@ var Kore = function(){
 
       var fileId = req.params.pdf
 
-      var filePath = path.resolve(__dirname, '../../downloads/files/pdf/' + fileId)
+      var filePath = '/var/dillinger/downloads/files/pdf/' + fileId
 
       res.download(filePath, fileId, function downloadPdfDownloadCb(err){
         if(err) {

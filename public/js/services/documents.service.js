@@ -219,7 +219,7 @@ function getCurrentDocumentSHA() {
     jQuery.getJSON('/load', function(data) {
       service.files = [];
       service.currentDocument = {};
-      var item = {body: data.text, id: 0, title: ''};
+      var item = {body: data.text, id: 0, title: 'doc'};
       service.addItem(item);
       service.setCurrentDocument(item);
 
