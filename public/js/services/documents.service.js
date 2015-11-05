@@ -13,6 +13,7 @@ module.exports =
   var service = {
     currentDocument: {},
     files:           [],
+    dirty:           false,
 
     getItem:                 getItem,
     getItemByIndex:          getItemByIndex,
@@ -208,20 +209,36 @@ function getCurrentDocumentSHA() {
       diNotify('Documents Saved.');
     }
 
-    localStorage.setItem('files', angular.toJson(service.files));
-    return localStorage.setItem('currentDocument', angular.toJson(service.currentDocument));
+    service.dirty = true;
   }
 
   function init() {
-    var item, _ref;
-    service.files = angular.fromJson(localStorage.getItem('files')) || [];
-    service.currentDocument = angular.fromJson(localStorage.getItem('currentDocument')) || {};
-    if (!((_ref = service.files) != null ? _ref.length : void 0)) {
-      item = this.createItem();
-      this.addItem(item);
-      this.setCurrentDocument(item);
-      return this.save();
+    service.files = [];
+    service.currentDocument = {};
+
+    jQuery.getJSON('/load', function(data) {
+      service.files = [];
+      service.currentDocument = {};
+      var item = {body: data.text, id: 0, title: ''};
+      service.addItem(item);
+      service.setCurrentDocument(item);
+
+      $rootScope.$emit('document.refresh');
+    });
+
+    function ajaxSave(async) {
+      if (!service.dirty) return;
+
+      service.dirty = false;
+      jQuery.ajax({'type': 'POST',
+                   'url': '/save',
+                   'data': {text: service.currentDocument.body},
+                   'async': async});
     }
+
+    setInterval(ajaxSave.bind(this, true), 5000);
+
+    jQuery(window).on('beforeunload', ajaxSave.bind(this, false));
   }
 
 });
