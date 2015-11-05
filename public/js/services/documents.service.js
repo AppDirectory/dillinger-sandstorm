@@ -217,30 +217,38 @@ function getCurrentDocumentSHA() {
     service.files = [];
     service.currentDocument = {};
 
-    jQuery.getJSON('/load', function(data) {
-      service.files = [];
-      service.currentDocument = {};
-      var item = {body: data.text, id: 0, title: 'doc'};
-      service.addItem(item);
-      service.setCurrentDocument(item);
-      service.loaded = true;
+    function ajaxLoad() {
+      jQuery.getJSON('/load', function(data) {
+        service.files = [];
+        service.currentDocument = {};
+        var item = {body: data.text, id: 0, title: 'doc'};
+        service.addItem(item);
+        service.setCurrentDocument(item);
+        service.loaded = true;
 
-      $rootScope.$emit('document.refresh');
-    });
-
-    function ajaxSave(async) {
-      if (!service.dirty || !service.loaded) return;
-
-      service.dirty = false;
-      jQuery.ajax({'type': 'POST',
-                   'url': '/save',
-                   'data': {text: service.currentDocument.body},
-                   'async': async});
+        $rootScope.$emit('document.refresh');
+      });
     }
 
-    setInterval(ajaxSave.bind(this, true), 5000);
+   ajaxLoad();
 
-    jQuery(window).on('beforeunload', ajaxSave.bind(this, false));
+    if (jQuery('body').hasClass('readonly')) {
+      setInterval(ajaxLoad, 5000);
+    } else {
+      function ajaxSave(async) {
+        if (!service.dirty || !service.loaded) return;
+
+        service.dirty = false;
+        jQuery.ajax({'type': 'POST',
+                     'url': '/save',
+                     'data': {text: service.currentDocument.body},
+                     'async': async});
+      }
+
+      setInterval(ajaxSave.bind(this, true), 5000);
+
+      jQuery(window).on('beforeunload', ajaxSave.bind(this, false));
+    }
   }
 
 });
