@@ -14,6 +14,7 @@ module.exports =
     currentDocument: {},
     files:           [],
     dirty:           false,
+    loaded:          false,
 
     getItem:                 getItem,
     getItemByIndex:          getItemByIndex,
@@ -222,12 +223,13 @@ function getCurrentDocumentSHA() {
       var item = {body: data.text, id: 0, title: 'doc'};
       service.addItem(item);
       service.setCurrentDocument(item);
+      service.loaded = true;
 
       $rootScope.$emit('document.refresh');
     });
 
     function ajaxSave(async) {
-      if (!service.dirty) return;
+      if (!service.dirty || !service.loaded) return;
 
       service.dirty = false;
       jQuery.ajax({'type': 'POST',
