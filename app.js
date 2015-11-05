@@ -95,6 +95,9 @@ app.use(github)
 app.use(googledrive)
 app.use(onedrive)
 
+app.post('/save', routes.save)
+app.get('/load', routes.load)
+
 http.createServer(app).listen(app.get('port'), function createServerCb() {
   console.log('Express server listening on port ' + app.get('port'))
   console.log('\nhttp://localhost:' + app.get('port') + '\n')
