@@ -22,10 +22,6 @@ var config = require('./config')()
   , fs = require('fs')
   , app = express()
   , core = require('./plugins/core/server.js')
-  , dropbox = require('./plugins/dropbox/server.js')
-  , github = require('./plugins/github/server.js')
-  , googledrive = require('./plugins/googledrive/server.js')
-  , onedrive = require('./plugins/onedrive/server.js')
   , env = process.env.NODE_ENV || 'development'
   , sharejs = require('share').server
   ;
@@ -91,10 +87,6 @@ app.get('/', routes.index)
 app.get('/not-implemented', routes.not_implemented)
 
 app.use(core)
-app.use(dropbox)
-app.use(github)
-app.use(googledrive)
-app.use(onedrive)
 
 var server = http.createServer(app)
 

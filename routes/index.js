@@ -2,10 +2,6 @@ var path = require('path')
   , request = require('request')
   , qs = require('querystring')
   , fs = require('fs')
-  , Dropbox = require( path.resolve(__dirname, '../plugins/dropbox/dropbox.js') ).Dropbox
-  , Github = require( path.resolve(__dirname, '../plugins/github/github.js') ).Github
-  , GoogleDrive = require('../plugins/googledrive/googledrive.js').GoogleDrive
-  , OneDrive = require('../plugins/onedrive/onedrive.js').OneDrive
 
 // Show the home page
 exports.index = function(req, res) {
@@ -19,10 +15,10 @@ exports.index = function(req, res) {
     isEvernoteAuth: !!req.session.isEvernoteSynced,
     isGoogleDriveAuth: !!req.session.isGoogleDriveSynced,
     isOneDriveAuth: !!req.session.isOneDriveSynced,
-    isDropboxConfigured: Dropbox.isConfigured,
-    isGithubConfigured: Github.isConfigured,
-    isGoogleDriveConfigured: GoogleDrive.isConfigured,
-    isOneDriveConfigured: OneDrive.isConfigured,
+    isDropboxConfigured: false,
+    isGithubConfigured: false,
+    isGoogleDriveConfigured: false,
+    isOneDriveConfigured: false,
     isReadOnly: isReadOnly
   }
 
