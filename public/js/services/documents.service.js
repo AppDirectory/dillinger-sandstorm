@@ -13,8 +13,6 @@ module.exports =
   var service = {
     currentDocument: {},
     files:           [],
-    dirty:           false,
-    loaded:          false,
 
     getItem:                 getItem,
     getItemByIndex:          getItemByIndex,
@@ -209,46 +207,14 @@ function getCurrentDocumentSHA() {
     if (manual) {
       diNotify('Documents Saved.');
     }
-
-    service.dirty = true;
   }
 
   function init() {
     service.files = [];
     service.currentDocument = {};
-
-    function ajaxLoad() {
-      jQuery.getJSON('/load', function(data) {
-        service.files = [];
-        service.currentDocument = {};
-        var item = {body: data.text, id: 0, title: 'doc'};
-        service.addItem(item);
-        service.setCurrentDocument(item);
-        service.loaded = true;
-
-        $rootScope.$emit('document.refresh');
-      });
-    }
-
-   ajaxLoad();
-
-    if (jQuery('body').hasClass('readonly')) {
-      setInterval(ajaxLoad, 5000);
-    } else {
-      function ajaxSave(async) {
-        if (!service.dirty || !service.loaded) return;
-
-        service.dirty = false;
-        jQuery.ajax({'type': 'POST',
-                     'url': '/save',
-                     'data': {text: service.currentDocument.body},
-                     'async': async});
-      }
-
-      setInterval(ajaxSave.bind(this, true), 5000);
-
-      jQuery(window).on('beforeunload', ajaxSave.bind(this, false));
-    }
+    var item = {body: '', id: 0, title: 'doc'};
+    service.addItem(item);
+    service.setCurrentDocument(item);
   }
 
 });

@@ -26,7 +26,8 @@ var config = require('./config')()
   , github = require('./plugins/github/server.js')
   , googledrive = require('./plugins/googledrive/server.js')
   , onedrive = require('./plugins/onedrive/server.js')
-  , env = process.env.NODE_ENV || 'development';
+  , env = process.env.NODE_ENV || 'development'
+  , sharejs = require('share').server
   ;
 
 app.set('port', process.env.PORT || 8080)
@@ -95,10 +96,21 @@ app.use(github)
 app.use(googledrive)
 app.use(onedrive)
 
-app.post('/save', routes.ensureWritePermission, routes.save)
-app.get('/load', routes.load)
+var server = http.createServer(app)
 
-http.createServer(app).listen(app.get('port'), function createServerCb() {
+var sharejsAuth = function (agent, action) {
+	if (action.type == 'delete' || action.type == 'update') {
+		if (agent.headers['x-sandstorm-permissions'].search('write') == -1) {
+      action.reject();
+		}
+	}
+	action.accept();
+}
+
+sharejs.attach(app, {db: {type: 'redis'},
+                     auth: sharejsAuth})
+
+server.listen(app.get('port'), function createServerCb() {
   console.log('Express server listening on port ' + app.get('port'))
   console.log('\nhttp://localhost:' + app.get('port') + '\n')
 })

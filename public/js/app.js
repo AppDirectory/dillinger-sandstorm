@@ -83,6 +83,17 @@
 
   // Simple and works.
   return jQuery(window).on('load', function() {
+
+    ace.require = ace.acequire;
+    jQuery('head').append('<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.20/require.min.js"></script>').
+        append('<script src="/channel/bcsocket.js"></script>').
+        append('<script src="/share/share.js"></script>').
+        append('<script src="/share/ace.js"></script>');
+
+    var editor = angular.element(document.body).scope().$root.editor;
+    sharejs.open('doc', 'text', function(error, doc) { doc.attach_ace(editor); });
+    jQuery("textarea").focus();
+
     return jQuery('.splashscreen').animate({
       opacity: 0
     }, 400, function() {

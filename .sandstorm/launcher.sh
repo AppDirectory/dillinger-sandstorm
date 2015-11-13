@@ -34,7 +34,7 @@ export HOME=/var/dillinger
 export NODE_ENV=production
 
 mkdir -p /var/dillinger/downloads/files/{md,html,pdf}
-touch /var/dillinger/file.md
 
+redis-server &
 node app
 exit 0

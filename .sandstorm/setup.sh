@@ -23,6 +23,6 @@ set -euo pipefail
 # appropriate for your application.
 
 export DEBIAN_FRONTEND=noninteractive
-apt-get install -y nodejs nodejs-legacy
+apt-get install -y nodejs nodejs-legacy redis-server
 
 exit 0
