@@ -4,6 +4,7 @@
 # expect comments or ordering to be retained.
 bin/bash
 bin/mkdir
+bin/sleep
 bin/touch
 etc/fonts/conf.avail/20-unhint-small-dejavu-lgc-sans-mono.conf
 etc/fonts/conf.avail/20-unhint-small-dejavu-lgc-sans.conf
@@ -1475,6 +1476,7 @@ sandstorm-http-bridge-config
 sandstorm-manifest
 usr/bin/node
 usr/bin/nodejs
+usr/bin/redis-cli
 usr/bin/redis-server
 usr/bin/touch
 usr/lib/libv8.so.3.14.5

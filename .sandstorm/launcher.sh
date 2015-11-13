@@ -28,13 +28,19 @@ set -euo pipefail
 
 # By default, this script does nothing.  You'll have to modify it as
 # appropriate for your application.
-cd /opt/app
-
 export HOME=/var/dillinger
 export NODE_ENV=production
 
 mkdir -p /var/dillinger/downloads/files/{md,html,pdf}
 
+cd "${HOME}"
+
 redis-server &
-node app
+until redis-cli config set save "3 1"
+do
+	echo "Waiting for Redis to start..."
+	sleep 0.5s
+done
+
+node /opt/app/app.js
 exit 0
